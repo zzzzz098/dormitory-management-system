@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+    /* —— campus palette —— */
+    --accent:          #23b7a4;
+    --accent-hover:    #119684;
+    --accent-light:    rgba(35, 183, 164, .12);
+    --accent-glow:     rgba(35, 183, 164, .22);
+    --accent-blue:     #5aa7ff;
+    --accent-peach:    #ff9d7c;
+    --accent-lime:     #a7df73;
+
+    /* —— sidebar —— */
+    --sidebar-bg:      #123b48;
+    --sidebar-surface: rgba(255,255,255,.08);
+    --sidebar-hover:   rgba(255,255,255,.12);
+    --sidebar-active:  rgba(35, 183, 164, .24);
+    --sidebar-text:    rgba(255,255,255,.72);
+    --sidebar-text-on: rgba(255,255,255,.95);
+
+    /* —— surfaces —— */
+    --bg-page:         #eef9f7;
+    --bg-card:         #ffffff;
+    --bg-input:        #f7fcff;
+    --border:          #d7ecea;
+    --border-light:    #e7f4f1;
+
+    /* —— text —— */
+    --text-title:      #17323a;
+    --text-body:       #36515a;
+    --text-muted:      #78909a;
+    --text-placeholder:#a4b8bf;
+
+    /* —— shadows —— */
+    --shadow-xs:       0 1px 2px rgba(20, 83, 92, .05);
+    --shadow-sm:       0 2px 10px rgba(20, 83, 92, .07);
+    --shadow-md:       0 8px 22px rgba(20, 83, 92, .09);
+    --shadow-lg:       0 18px 44px rgba(20, 83, 92, .12);
+    --shadow-card:     0 1px 2px rgba(20, 83, 92, .05), 0 12px 30px rgba(35, 183, 164, .08);
+    --shadow-card-hover: 0 3px 8px rgba(20, 83, 92, .07), 0 18px 42px rgba(90, 167, 255, .12);
+
+    /* —— radius —— */
+    --r-sm:  6px;
+    --r-md:  10px;
+    --r-lg:  14px;
+    --r-xl:  20px;
+
+    /* —— fonts —— */
+    --font-display: 'Noto Serif SC', 'Songti SC', serif;
+    --font-body:    'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* —— timing —— */
+    --ease: cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ================== RESET ================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body, #app { height: 100%; overflow: hidden; }
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-body);
+    background:
+        linear-gradient(135deg, rgba(35,183,164,.10) 0 25%, transparent 25% 50%, rgba(90,167,255,.08) 50% 75%, transparent 75%) 0 0 / 42px 42px,
+        linear-gradient(160deg, #f5fffc 0%, #edf8ff 46%, #fff6f0 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ================== SCROLLBAR ================== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb {
+    background: rgba(35,183,164,.35);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(35,183,164,.55); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ================== ELEMENT PLUS OVERRIDES ================== */
+
+/* —— cards —— */
+.el-card {
+    border: 1px solid rgba(217,240,238,.84) !important;
+    border-radius: var(--r-lg) !important;
+    box-shadow: var(--shadow-card) !important;
+    background: rgba(255,255,255,.92) !important;
+    backdrop-filter: blur(10px);
+    transition: box-shadow .3s var(--ease);
+}
+.el-card:hover {
+    box-shadow: var(--shadow-card-hover) !important;
+}
+.el-card__header {
+    padding: 18px 24px !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-title);
+}
+
+/* —— tables —— */
+.el-table {
+    border-radius: var(--r-md) !important;
+    --el-table-border-color: var(--border-light);
+    overflow: hidden;
+}
+.el-table th.el-table__cell {
+    background: #eaf9f5 !important;
+    font-weight: 600;
+    color: var(--text-title);
+    font-size: 13px;
+    text-transform: none;
+}
+.el-table td.el-table__cell {
+    color: var(--text-body);
+}
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+    background: var(--accent-light) !important;
+}
+
+.el-table .cell {
+    line-height: 1.35;
+}
+
+/* —— dialogs —— */
+.el-dialog {
+    border-radius: var(--r-xl) !important;
+    overflow: hidden;
+}
+.el-dialog__header {
+    padding: 22px 28px 18px !important;
+    border-bottom: 1px solid var(--border-light);
+    margin: 0 !important;
+}
+.el-dialog__header .el-dialog__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text-title);
+}
+.el-dialog__body {
+    padding: 24px 28px !important;
+}
+.el-dialog__footer {
+    padding: 16px 28px 22px !important;
+    border-top: 1px solid var(--border-light);
+}
+
+/* —— buttons —— */
+.el-button {
+    border-radius: var(--r-sm) !important;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all .2s var(--ease) !important;
+}
+.el-button--primary {
+    --el-button-bg-color: var(--accent) !important;
+    --el-button-border-color: var(--accent) !important;
+    --el-button-hover-bg-color: var(--accent-hover) !important;
+    --el-button-hover-border-color: var(--accent-hover) !important;
+    --el-button-active-bg-color: var(--accent-hover) !important;
+    --el-button-active-border-color: var(--accent-hover) !important;
+}
+.el-button--primary:not(.is-plain) {
+    box-shadow: 0 6px 16px rgba(35, 183, 164, .26);
+}
+.el-button--primary:not(.is-plain):hover {
+    box-shadow: 0 10px 22px rgba(35, 183, 164, .34);
+    transform: translateY(-1px);
+}
+.el-button--danger {
+    --el-button-bg-color: #ff7b73 !important;
+    --el-button-border-color: #ff7b73 !important;
+    --el-button-hover-bg-color: #f0645d !important;
+    --el-button-hover-border-color: #f0645d !important;
+}
+
+/* —— inputs —— */
+.el-input__wrapper {
+    border-radius: var(--r-sm) !important;
+    background: var(--bg-input) !important;
+    box-shadow: 0 0 0 1px var(--border) inset !important;
+    transition: all .2s var(--ease) !important;
+}
+.el-input__wrapper:hover {
+    box-shadow: 0 0 0 1px var(--accent-blue) inset !important;
+}
+.el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 2px var(--accent) inset !important;
+}
+
+/* —— breadcrumb —— */
+.el-breadcrumb {
+    font-size: 13px;
+    font-weight: 400;
+}
+.el-breadcrumb__inner, .el-breadcrumb__inner a {
+    color: var(--text-muted) !important;
+}
+.el-breadcrumb__inner.is-link:hover {
+    color: var(--accent) !important;
+}
+.el-breadcrumb__item:last-child .el-breadcrumb__inner {
+    color: var(--text-title) !important;
+    font-weight: 600;
+}
+
+/* —— pagination —— */
+.el-pagination {
+    justify-content: flex-end;
+}
+
+/* —— popconfirm —— */
+.el-popconfirm__main {
+    font-size: 13px;
+    color: var(--text-body);
+}
+
+/* —— form labels —— */
+.el-form-item__label {
+    color: var(--text-body) !important;
+    font-weight: 500;
+}
+
+/* —— radio —— */
+.el-radio__input.is-checked + .el-radio__label {
+    color: var(--accent);
+}
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: var(--accent);
+    background: var(--accent);
+}
+
+/* —— menu (global for Aside) —— */
+.el-menu { border-right: none !important; }
