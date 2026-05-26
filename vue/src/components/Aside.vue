@@ -3,7 +3,7 @@
     <!-- logo -->
     <div class="sidebar-brand">
       <div class="brand-icon">
-        <img alt="" src="@/assets/logo.png"/>
+        <img alt="" src="@/assets/logo-pixel-dorm.png"/>
       </div>
       <div class="brand-text">
         <span class="brand-name">宿舍管理系统</span>
@@ -53,6 +53,7 @@
           <span>信息管理</span>
         </template>
         <el-menu-item v-if="judgeIdentity()===2" index="/noticeInfo">公告信息</el-menu-item>
+        <el-menu-item v-if="judgeIdentity()!==0" index="/forumManageInfo">帖子管理</el-menu-item>
         <el-menu-item v-if="judgeIdentity()!==0" index="/repairInfo">报修信息</el-menu-item>
       </el-sub-menu>
 
@@ -80,6 +81,10 @@
       <el-menu-item v-if="judgeIdentity()===0" index="/myRoomInfo" class="nav-item">
         <el-icon><school/></el-icon>
         <template #title>我的宿舍</template>
+      </el-menu-item>
+      <el-menu-item v-if="judgeIdentity()===0" index="/forumInfo" class="nav-item">
+        <el-icon><chat-line-round/></el-icon>
+        <template #title>校园社区</template>
       </el-menu-item>
       <el-menu-item v-if="judgeIdentity()===0" index="/applyChangeRoom" class="nav-item">
         <el-icon><sort/></el-icon>
@@ -175,21 +180,22 @@ export default {
 }
 
 .brand-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-blue) 58%, var(--accent-peach));
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 10px 24px rgba(35,183,164,.28);
+  box-shadow: 0 10px 24px rgba(35,183,164,.20);
 }
 
 .brand-icon img {
-  width: 20px;
-  height: 20px;
-  filter: brightness(10);
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  image-rendering: pixelated;
 }
 
 .brand-text {

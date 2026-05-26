@@ -15,7 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/admin/login",
                         "/stu/login",
                         "/dormManager/login",
-                        "/files/initAvatar/**"
+                        "/files/initAvatar/**",
+                        "/files/image/**"
                 );
     }
 }
