@@ -15,11 +15,13 @@ export const constantRoutes = [
             {path: '/utilityInfo', name: 'UtilityInfo', component: () => import("@/views/UtilityInfo"), meta: {roles: ['admin', 'dormManager']}},
             {path: '/accessInfo', name: 'AccessInfo', component: () => import("@/views/AccessInfo"), meta: {roles: ['admin', 'dormManager']}},
             {path: '/noticeInfo', name: 'NoticeInfo', component: () => import("@/views/NoticeInfo"), meta: {roles: ['admin', 'dormManager']}},
+            {path: '/forumManageInfo', name: 'ForumManageInfo', component: () => import("@/views/ForumManageInfo"), meta: {roles: ['admin', 'dormManager']}},
             {path: '/adjustRoomInfo', name: 'AdjustRoomInfo', component: () => import("@/views/AdjustRoomInfo"), meta: {roles: ['admin', 'dormManager']}},
             {path: '/repairInfo', name: 'RepairInfo', component: () => import("@/views/RepairInfo"), meta: {roles: ['admin', 'dormManager']}},
             {path: '/visitorInfo', name: 'VisitorInfo', component: () => import("@/views/VisitorInfo"), meta: {roles: ['admin', 'dormManager']}},
             // 学生页面
             {path: '/myRoomInfo', name: 'MyRoomInfo', component: () => import("@/views/MyRoomInfo"), meta: {roles: ['stu']}},
+            {path: '/forumInfo', name: 'ForumInfo', component: () => import("@/views/ForumInfo"), meta: {roles: ['stu']}},
             {path: '/applyRepairInfo', name: 'ApplyRepairInfo', component: () => import("@/views/ApplyRepairInfo"), meta: {roles: ['stu']}},
             {path: '/applyChangeRoom', name: 'ApplyChangeRoom', component: () => import("@/views/ApplyChangeRoom"), meta: {roles: ['stu']}},
             // 所有角色

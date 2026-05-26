@@ -140,6 +140,15 @@ public class FileController {
         return Result.success(getImage(path));
     }
 
+    @GetMapping("/image/{filename}")
+    public Result<?> image(@PathVariable String filename) throws IOException {
+        if (filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
+            return Result.error("-1", "鏂囦欢鍚嶄笉鍚堟硶");
+        }
+        String path = rootFilePath + filename;
+        return Result.success(getImage(path));
+    }
+
     private String getImage(String path) throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(path);
              ByteArrayOutputStream bos = new ByteArrayOutputStream()) {

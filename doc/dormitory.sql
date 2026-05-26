@@ -83,6 +83,31 @@ CREATE TABLE notice (
     release_time VARCHAR(50)
 );
 
+-- 8. 校园帖子表
+CREATE TABLE forum_post (
+    id              INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title           VARCHAR(200) NOT NULL,
+    content         TEXT         NOT NULL,
+    category        VARCHAR(20)  NOT NULL,
+    image           VARCHAR(255),
+    author_username VARCHAR(50)  NOT NULL,
+    author_name     VARCHAR(50),
+    create_time     VARCHAR(50),
+    update_time     VARCHAR(50),
+    deleted         INT          NOT NULL DEFAULT 0
+);
+
+-- 9. 校园帖子评论表
+CREATE TABLE forum_comment (
+    id              INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    post_id         INT         NOT NULL,
+    content         TEXT        NOT NULL,
+    author_username VARCHAR(50) NOT NULL,
+    author_name     VARCHAR(50),
+    create_time     VARCHAR(50),
+    deleted         INT         NOT NULL DEFAULT 0
+);
+
 -- 8. 报修表
 CREATE TABLE repair (
     id               INT          NOT NULL PRIMARY KEY,
@@ -463,4 +488,95 @@ FROM (
 ) seed
 WHERE NOT EXISTS (
     SELECT 1 FROM dorm_room existing WHERE existing.dormroom_id = seed.dormroom_id
+);
+
+-- 校园社区帖子与评论种子数据
+INSERT INTO forum_post
+    (title, content, category, image, author_username, author_name, create_time, update_time, deleted)
+SELECT seed.title, seed.content, seed.category, seed.image, seed.author_username, seed.author_name,
+       seed.create_time, seed.update_time, 0
+FROM (
+    SELECT '蓝色雨伞遗失在三号楼自习室' title,
+           '昨晚自习后把一把蓝色折叠伞落在三号楼二楼自习室靠窗位置，伞柄上贴有白色姓名贴。如有同学看到，麻烦在评论区联系我，谢谢。' content,
+           '失物' category, NULL image, 'stu001' author_username, '李同学' author_name,
+           '2026-05-26 09:12:00' create_time, '2026-05-26 09:12:00' update_time
+    UNION ALL SELECT '校园卡可能掉在食堂到宿舍路上',
+           '今天中午从食堂回一号楼路上发现校园卡不见了，卡套是透明的，里面有一张蓝色便签。如果有人捡到请帮忙留言。',
+           '失物', NULL, 'stu002', '王同学', '2026-05-26 12:35:00', '2026-05-26 12:35:00'
+    UNION ALL SELECT '捡到一串钥匙，挂着小熊挂件',
+           '在二号楼门口花坛旁捡到一串钥匙，上面有一个棕色小熊挂件。已暂时交给二号楼宿管值班室，失主可以去认领。',
+           '招领', NULL, 'stu003', '赵同学', '2026-05-26 13:20:00', '2026-05-26 13:20:00'
+    UNION ALL SELECT '图书馆门口捡到无线耳机盒',
+           '下午在图书馆门口长椅附近捡到一个白色无线耳机盒，外壳有轻微划痕。请失主说出品牌和特征后认领。',
+           '招领', NULL, 'stu004', '陈同学', '2026-05-26 15:08:00', '2026-05-26 15:08:00'
+    UNION ALL SELECT '分享一下宿舍收纳小技巧',
+           '最近把桌面和衣柜重新整理了一下，发现透明收纳盒、分层衣架和线缆夹真的很有用。空间小也可以保持清爽，推荐大家周末一起整理。',
+           '分享', NULL, 'stu005', '周同学', '2026-05-26 16:42:00', '2026-05-26 16:42:00'
+    UNION ALL SELECT '晚自习后操场散步很舒服',
+           '这两天天气不错，晚自习结束后绕操场走几圈很放松。大家如果学习压力大，可以试试慢走二十分钟再回宿舍。',
+           '分享', NULL, 'stu001', '李同学', '2026-05-26 19:18:00', '2026-05-26 19:18:00'
+    UNION ALL SELECT '求助：热水卡充值后还没到账',
+           '下午在机器上给热水卡充值后，宿舍刷卡还是显示余额不足。有没有同学遇到过这种情况？一般多久会同步？',
+           '求助', NULL, 'stu002', '王同学', '2026-05-26 20:05:00', '2026-05-26 20:05:00'
+    UNION ALL SELECT '求推荐安静的背书地点',
+           '最近要准备考试，宿舍和走廊都有点吵。想问问大家晚上哪里比较适合背书，不影响别人也不会太冷。',
+           '求助', NULL, 'stu003', '赵同学', '2026-05-26 21:30:00', '2026-05-26 21:30:00'
+) seed
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM forum_post existing
+    WHERE existing.title = seed.title
+      AND existing.author_username = seed.author_username
+);
+
+INSERT INTO forum_comment
+    (post_id, content, author_username, author_name, create_time, deleted)
+SELECT p.id, seed.content, seed.author_username, seed.author_name, seed.create_time, 0
+FROM (
+    SELECT '蓝色雨伞遗失在三号楼自习室' post_title,
+           '我上午去自习室时看到窗边有一把伞，已经放到讲台旁边了，你可以去看看。' content,
+           'stu004' author_username, '陈同学' author_name, '2026-05-26 09:45:00' create_time
+    UNION ALL SELECT '蓝色雨伞遗失在三号楼自习室',
+           '如果还没找到，也可以问一下三号楼值班老师，最近失物都会先放那里。',
+           'stu005', '周同学', '2026-05-26 10:02:00'
+    UNION ALL SELECT '校园卡可能掉在食堂到宿舍路上',
+           '我路过食堂门口公告栏时看到有人贴了校园卡招领，你可以去确认一下。',
+           'stu001', '李同学', '2026-05-26 12:50:00'
+    UNION ALL SELECT '捡到一串钥匙，挂着小熊挂件',
+           '谢谢提醒，我帮同寝同学转发一下，他今天刚说钥匙找不到了。',
+           'stu002', '王同学', '2026-05-26 13:36:00'
+    UNION ALL SELECT '图书馆门口捡到无线耳机盒',
+           '建议也发到班级群里，耳机盒比较容易被着急找。',
+           'stu005', '周同学', '2026-05-26 15:22:00'
+    UNION ALL SELECT '分享一下宿舍收纳小技巧',
+           '线缆夹真的有用，桌面一下子清爽很多。',
+           'stu003', '赵同学', '2026-05-26 17:03:00'
+    UNION ALL SELECT '分享一下宿舍收纳小技巧',
+           '分层衣架我也在用，衣柜空间能多出不少。',
+           'stu004', '陈同学', '2026-05-26 17:18:00'
+    UNION ALL SELECT '晚自习后操场散步很舒服',
+           '同感，走完再回去洗漱，睡眠也会好一点。',
+           'stu002', '王同学', '2026-05-26 19:45:00'
+    UNION ALL SELECT '晚自习后操场散步很舒服',
+           '可以约个固定时间一起走，互相督促少熬夜。',
+           'stu005', '周同学', '2026-05-26 20:01:00'
+    UNION ALL SELECT '求助：热水卡充值后还没到账',
+           '我之前遇到过，等十几分钟再刷就好了，如果一直不行去宿管处登记。',
+           'stu004', '陈同学', '2026-05-26 20:16:00'
+    UNION ALL SELECT '求助：热水卡充值后还没到账',
+           '也可以先确认充值机有没有打印成功凭条，凭条最好留着。',
+           'stu001', '李同学', '2026-05-26 20:24:00'
+    UNION ALL SELECT '求推荐安静的背书地点',
+           '教学楼一楼靠东侧晚上人少，声音小一点就不太打扰别人。',
+           'stu005', '周同学', '2026-05-26 21:48:00'
+) seed
+JOIN forum_post p
+  ON p.title = seed.post_title
+ AND p.deleted = 0
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM forum_comment existing
+    WHERE existing.post_id = p.id
+      AND existing.content = seed.content
+      AND existing.author_username = seed.author_username
 );
