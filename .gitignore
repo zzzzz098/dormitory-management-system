@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Superpowers scratch ###
+.superpowers/
+
 ### Vue ###
 vue/node_modules/
 vue/dist/

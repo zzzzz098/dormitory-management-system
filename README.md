@@ -68,6 +68,44 @@
 - 管理员和宿管可以查看全部帖子，并删除不合适的帖子或评论。
 - 帖子和评论采用逻辑删除，不会从数据库物理移除。
 
+## AI 小助手模块
+
+系统新增全局右下角悬浮 AI 小助手，登录后在后台和学生端页面均可使用。小助手采用“本地意图识别 + 大模型兜底”的混合模式：
+
+- 已知宿舍业务命令优先由后端本地规则解析，例如查询学生、查询空床位、查看晚归告警、跳转公告管理、生成报修或公告草稿。
+- 本地无法明确识别的普通问题会调用 OpenAI-compatible 大模型接口，例如宿舍管理建议、公告文案润色、注意事项总结等。
+- 大模型只允许返回文字回复和“建议动作”，后端会重新映射到本地能力注册表，并按当前登录角色二次校验。
+- 所有新增、修改类操作只会打开现有页面并预填草稿，不会直接写入数据库，仍需用户在页面中手动确认保存。
+- 删除类指令不会自动执行，小助手会提示用户进入对应页面手动处理。
+
+### 支持示例
+
+- `查张三`：查询当前角色有权限访问的学生、访客、报修、论坛等模块，并提供跳转或搜索按钮。
+- `3号楼空床位`：查询楼宇、房间、床位相关信息。
+- `最近晚归告警`：返回晚归告警摘要并可跳转出入管理页面。
+- `新增公告：今晚停水`：跳转公告管理并打开新增公告草稿。
+- `给101宿舍新增报修：灯坏了`：跳转报修页面并生成待确认草稿。
+
+### 大模型环境变量
+
+大模型调用默认通过环境变量配置，不需要把真实密钥提交到仓库：
+
+| 环境变量 | 说明 | 默认值 |
+| --- | --- | --- |
+| `LLM_API_KEY` | OpenAI-compatible 服务的 API Key；缺少时自动降级为本地助手 | 空 |
+| `LLM_BASE_URL` | 服务地址，例如 `https://api.deepseek.com` | `https://api.openai.com` |
+| `LLM_MODEL` | 模型名称，例如 `deepseek-chat` 或服务商提供的模型名 | `gpt-4o-mini` |
+
+Windows PowerShell 示例：
+
+```powershell
+setx LLM_API_KEY "your-api-key"
+setx LLM_BASE_URL "https://api.deepseek.com"
+setx LLM_MODEL "your-model-name"
+```
+
+`setx` 写入的是后续新终端的用户环境变量。配置后请重新打开终端，并重启 Spring Boot 后端；否则当前已运行的后端进程仍读取不到新值。
+
 ## 技术栈
 
 | 层级 | 技术 |
@@ -85,6 +123,7 @@ DormitoryManagementSystem/
 │   ├── src/main/java/com/example/springboot/
 │   │   ├── common/                     # 配置、工具类、拦截器、定时任务
 │   │   ├── controller/                 # 控制器
+│   │   │   └── AssistantController.java # AI 小助手接口
 │   │   ├── entity/                     # 实体类
 │   │   ├── mapper/                     # MyBatis-Plus Mapper
 │   │   └── service/                    # 业务逻辑
@@ -93,9 +132,10 @@ DormitoryManagementSystem/
 ├── vue/                                # Vue 3 前端
 │   ├── src/assets/                     # CSS、页面脚本、图片资源
 │   ├── src/components/                 # 公共组件
+│   │   └── AssistantWidget.vue         # 全局 AI 小助手组件
 │   ├── src/layout/                     # 布局组件
 │   ├── src/router/                     # 路由配置
-│   ├── src/utils/                      # Axios 请求封装
+│   ├── src/utils/                      # Axios 请求封装、AI 小助手事件桥
 │   └── src/views/                      # 页面视图
 ├── doc/                                # 数据库脚本
 │   ├── dormitory.sql                   # 全量初始化脚本
@@ -133,6 +173,8 @@ mysql -u root -p dormitory < doc/campus_seed.sql
 ```
 
 ### 2. 启动后端
+
+如果需要启用 AI 小助手的大模型兜底能力，请先配置 `LLM_API_KEY`、`LLM_BASE_URL` 和 `LLM_MODEL` 环境变量。未配置 `LLM_API_KEY` 时，系统仍可正常启动，小助手会保留本地查询、跳转和草稿能力，并对未知问题返回降级提示。
 
 ```bash
 cd Dormitory_business
@@ -189,4 +231,3 @@ mvn test
 cd vue
 npm run build
 ```
-

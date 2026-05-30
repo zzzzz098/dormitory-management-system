@@ -11,16 +11,18 @@
         <router-view/>
       </el-main>
     </el-container>
+    <AssistantWidget/>
   </el-container>
 </template>
 
 <script>
 import Header from "@/components/Header";
 import Aside from "@/components/Aside";
+import AssistantWidget from "@/components/AssistantWidget";
 
 export default {
   name: "layout",
-  components: { Header, Aside },
+  components: { Header, Aside, AssistantWidget },
 }
 </script>
 

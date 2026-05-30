@@ -175,6 +175,23 @@ export default {
                 this.disabled = true;
             });
         },
+        assistantOpenDraft(payload) {
+            this.add();
+            this.$nextTick(() => {
+                const now = new Date();
+                const pad = (value) => String(value).padStart(2, "0");
+                const releaseTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+                this.form = Object.assign({}, this.form || {}, {
+                    title: payload.title || payload.keyword || "",
+                    content: payload.content || payload.title || "",
+                    author: this.author,
+                    releaseTime,
+                });
+                if (editor) {
+                    editor.txt.html(this.form.content || "");
+                }
+            });
+        },
         handleDelete(id) {
             console.log(id);
             request.delete("/notice/delete/" + id).then((res) => {

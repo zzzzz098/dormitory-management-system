@@ -8,6 +8,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ELIcons from '@element-plus/icons-vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import {installAssistantBridge} from "@/utils/assistantBridge";
 
 const app = createApp(App)
     .use(ElementPlus, {
@@ -18,5 +19,5 @@ for (let iconName in ELIcons) {
 }
 app.use(router)
 app.use(store)
+installAssistantBridge(app)
 app.mount('#app')
-
